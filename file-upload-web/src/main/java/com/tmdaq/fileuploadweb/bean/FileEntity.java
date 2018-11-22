@@ -29,5 +29,4 @@ public class FileEntity extends BaseBean{
     private Boolean isHidden;
     @Column(name = "is_write")
     private Boolean isWrite;
-
 }

@@ -1,7 +1,3 @@
-server:
-  port: 8000
-scan:
-  path: ['/home/vttmlin/']
 spring:
   profiles:
     active: dev
@@ -21,6 +17,8 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+scan:
+  path: ['/home/vttmlin/go']
 
 ---
 
@@ -38,3 +36,6 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+scan:
+  path: ['/home/vttmlin/go']
+  maxDeep: 2
