@@ -9,16 +9,16 @@ public class ResultDo<T> {
     private Code code;
 
     public ResultDo(T data) {
-        if(data!=null){
-            code=Code.SUCCESS;
-        }else {
-            code=Code.ERROR;
+        if (data != null) {
+            code = Code.SUCCESS;
+        } else {
+            code = Code.ERROR;
         }
-        this.data=data;
+        this.data = data;
     }
 
-    public ResultDo(T data,Code code) {
-        this.code=code;
-        this.data=data;
+    public ResultDo(T data, Code code) {
+        this.code = code;
+        this.data = data;
     }
 }

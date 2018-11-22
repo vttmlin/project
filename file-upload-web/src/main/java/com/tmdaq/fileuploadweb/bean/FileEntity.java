@@ -4,17 +4,17 @@ import com.tmdaq.fileuploadweb.common.BaseBean;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import sun.rmi.runtime.Log;
 
-import javax.persistence.*;
-import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Table(name = "t_file")
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class FileEntity extends BaseBean{
+public class FileEntity extends BaseBean {
     @Column(name = "file_name")
     private String fileName;
     @Column(name = "file_size")

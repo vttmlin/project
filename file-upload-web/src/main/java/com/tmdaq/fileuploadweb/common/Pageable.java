@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 public class Pageable<T> {
     public static final Pageable GetFirst = new Pageable<BaseBean>(null);
     private T data;
-    private String select="*";
+    private String select = "*";
     @JsonIgnore
     private String orderStr;
 
@@ -17,7 +17,7 @@ public class Pageable<T> {
         this.data = data;
     }
 
-    private Pageable(){
+    private Pageable() {
         this(null);
     }
 }

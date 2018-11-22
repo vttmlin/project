@@ -38,9 +38,9 @@ public class LogicDeleteAspect {
                 String name = arg.getClass().getAnnotation(Table.class).name();
                 int update = jdbcTemplate.update("UPDATE " + name + " SET is_delete=FALSE WHERE ID='" + arg + "'");
                 if (update == 1) {
-                    result= new ResultDo<BaseBean>(arg, Code.SUCCESS);
-                }else {
-                    result= new ResultDo<BaseBean>(arg, Code.ERROR);
+                    result = new ResultDo<BaseBean>(arg, Code.SUCCESS);
+                } else {
+                    result = new ResultDo<BaseBean>(arg, Code.ERROR);
                 }
             }
         } catch (Exception e) {

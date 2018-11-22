@@ -31,7 +31,7 @@ public class FileEntryServiceImpl implements FileEntryService {
 
     @Override
     public ResultDo<FileEntity> save(FileEntity fileEntity) {
-        if(fileEntity==null){
+        if (fileEntity == null) {
             return new ResultDo<>(null, Code.ERROR);
         }
         return new ResultDo<>(repository.save(fileEntity), Code.ERROR);
@@ -39,35 +39,35 @@ public class FileEntryServiceImpl implements FileEntryService {
 
     @Override
     public ResultDo<FileEntity> scan(List<String> path) {
-        if(path!=null){
-            this.path=path;
+        if (path != null) {
+            this.path = path;
         }
         List<FileEntity> list = new LinkedList<>();
 
-        scanFile(path,list);
-        return new ResultDo<>(new FileEntity(),Code.SUCCESS);
+        scanFile(path, list);
+        return new ResultDo<>(new FileEntity(), Code.SUCCESS);
     }
 
-    private void scanFile(List<String> path,List<FileEntity> list) {
+    private void scanFile(List<String> path, List<FileEntity> list) {
         for (String s : path) {
-            digui(new File(s),0,list);
+            digui(new File(s), 0, list);
         }
     }
 
-    private void digui(File file,Integer countDeep, List<FileEntity> list) {
-        if(!file.exists()){
+    private void digui(File file, Integer countDeep, List<FileEntity> list) {
+        if (!file.exists()) {
             return;
-        }else if(file.isDirectory()) {
+        } else if (file.isDirectory()) {
             File[] files = file.listFiles();
             countDeep++;
-            if(countDeep>=maxDeep){
+            if (countDeep >= maxDeep) {
                 for (File f : files) {
-                    digui(f,countDeep,list);
+                    digui(f, countDeep, list);
                 }
-            }else {
+            } else {
                 unScan.addAll(Arrays.asList(files));
             }
-        }else {
+        } else {
             FileEntity e = ((FileEntity) new FileEntity()
                     .setFileName(file.getName())
                     .setFilePath(file.getAbsolutePath())
