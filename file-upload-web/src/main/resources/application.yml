@@ -1,0 +1,24 @@
+server:
+  port: 8000
+scan:
+  path: ['/home/vttmlin/']
+spring:
+  datasource:
+    hikari:
+     connection-test-query: select 1
+     driver-class-name: com.mysql.jdbc.Driver
+     jdbc-url: jdbc:mysql:
+     username: root
+     password: root
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+
+
+
+#     spring.jpa.database-platform=org.hibernate.dialect.MySQL5InnoDBDialect
+#      spring.jpa.show-sql=true
+#      spring.jpa.hibernate.ddl-auto=create
