@@ -3,11 +3,17 @@ server:
 scan:
   path: ['/home/vttmlin/']
 spring:
+  profiles:
+    active: dev
+
+---
+spring:
+  profiles: pro
   datasource:
     hikari:
      connection-test-query: select 1
      driver-class-name: com.mysql.jdbc.Driver
-     jdbc-url: jdbc:mysql:
+     jdbc-url: jdbc:h2:file:~/.h2/testdb
      username: root
      password: root
   jpa:
@@ -16,9 +22,19 @@ spring:
     hibernate:
       ddl-auto: update
 
+---
 
-
-
-#     spring.jpa.database-platform=org.hibernate.dialect.MySQL5InnoDBDialect
-#      spring.jpa.show-sql=true
-#      spring.jpa.hibernate.ddl-auto=create
+spring:
+  profiles: dev
+  datasource:
+    hikari:
+     connection-test-query: select 1
+     driver-class-name: org.h2.Driver
+     jdbc-url: jdbc:h2:file:~/.h2/testdb
+     username: root
+     password: root
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update

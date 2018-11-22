@@ -13,11 +13,11 @@ import java.util.Date;
 public class FileEntity {
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
     @Column
     private String fileName;
     @Column
-    private Long fileSize;
+    private long fileSize;
     @Column
     private String filePath;
     @Column
@@ -25,13 +25,13 @@ public class FileEntity {
     @Column
     private Date updateTime;
     @Column
-    private Long updateCount;
+    private long updateCount;
     @Column
-    private Boolean isDir;
+    private boolean isDir;
     @Column
-    private Boolean isHidden;
+    private boolean isHidden;
     @Column
-    private Boolean isWrite;
+    private boolean isWrite;
     @Column
     private boolean isDelete;
     @Transient

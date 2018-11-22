@@ -11,18 +11,63 @@
     <version>0.0.1</version>
     <packaging>pom</packaging>
 
+    <properties>
+        <!--dependency version-->
+        <springboot.version>2.1.0.RELEASE</springboot.version>
+        <quartz.version>2.3.0</quartz.version>
+        <!--plugin version-->
+        <compiler.version>3.8.0</compiler.version>
+    </properties>
+
     <dependencyManagement>
         <dependencies>
+            <!--springboot-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.1.0.RELEASE</version>
+                <version>${springboot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <!--spring shell-->
+            <dependency>
+                <groupId>org.springframework.shell</groupId>
+                <artifactId>spring-shell-starter</artifactId>
+                <version>2.0.1.RELEASE</version>
+            </dependency>
+            <!--引入quartz依赖-->
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz</artifactId>
+                <version>${quartz.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz-jobs</artifactId>
+                <version>${quartz.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
     <build>
         <finalName>${project.groupId}.${project.artifactId}.${project.version}</finalName>
+        <pluginManagement>
+            <plugins>
+                <!--java编译版本控制-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${compiler.version}</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 </project>
