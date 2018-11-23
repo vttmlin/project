@@ -18,7 +18,7 @@ spring:
     hibernate:
       ddl-auto: update
 scan:
-  path: ['/home/vttmlin/go']
+  path: ['/home/vttmlin/IdeaProjects/ahjy/out/artifacts']
 
 ---
 
@@ -37,5 +37,4 @@ spring:
     hibernate:
       ddl-auto: update
 scan:
-  path: ['/home/vttmlin/go']
-  maxDeep: 2
+  path: ['/home/vttmlin/IdeaProjects/ahjy/out/artifacts/ahjy/WEB-INF']

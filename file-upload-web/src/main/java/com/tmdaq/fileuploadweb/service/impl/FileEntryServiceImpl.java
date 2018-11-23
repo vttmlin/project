@@ -2,6 +2,7 @@ package com.tmdaq.fileuploadweb.service.impl;
 
 import com.tmdaq.fileuploadweb.bean.FileEntity;
 import com.tmdaq.fileuploadweb.common.Code;
+import com.tmdaq.fileuploadweb.common.PageUtil;
 import com.tmdaq.fileuploadweb.common.ResultDo;
 import com.tmdaq.fileuploadweb.dao.FileEntryRepository;
 import com.tmdaq.fileuploadweb.service.FileEntryService;
@@ -9,10 +10,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Stack;
 
 @Service
 @ConfigurationProperties(prefix = "scan")
@@ -21,8 +27,7 @@ import java.util.*;
 public class FileEntryServiceImpl implements FileEntryService {
     private final FileEntryRepository repository;
     private List<String> path = new ArrayList<>();
-    private Integer maxDeep;
-    private List<File> unScan = new ArrayList<>();
+    private Stack<String> dicStack = new Stack<>();
 
     @Autowired
     public FileEntryServiceImpl(FileEntryRepository repository) {
@@ -42,40 +47,59 @@ public class FileEntryServiceImpl implements FileEntryService {
         if (path != null) {
             this.path = path;
         }
-        List<FileEntity> list = new LinkedList<>();
-
-        scanFile(path, list);
+        scanFile(path);
         return new ResultDo<>(new FileEntity(), Code.SUCCESS);
     }
 
-    private void scanFile(List<String> path, List<FileEntity> list) {
+    @Override
+    public ResultDo<PageUtil<FileEntity>> findAll(PageUtil<FileEntity> pager) {
+        Example<FileEntity> example = Example.of(pager.getQuery());
+        pager.setSort(new Sort(Sort.Direction.DESC, "id"));
+        return new ResultDo<>(pager.setData(repository.findAll(example, pager.toPageRequest()).getContent()));
+    }
+
+    private void scanFile(List<String> path) {
         for (String s : path) {
-            digui(new File(s), 0, list);
+            File file = new File(s);
+            if (file.exists()) {
+                dicStack.push(file.toString());
+            }
+        }
+        recursion();
+    }
+
+    public void recursion() {
+        while (!dicStack.isEmpty()) {
+            String fileStr = dicStack.pop();
+            File file = new File(fileStr);
+            if (!file.exists()) {
+                return;
+            }
+            if (file.isFile()) {
+                repository.save(fileToFileEntity(file));
+            } else if (file.isDirectory()) {
+                File[] files = file.listFiles();
+                if (files != null && file.length() > 0) {
+                    for (File f : files) {
+                        if (f.isFile()) {
+                            repository.save(fileToFileEntity(f));
+                        } else {
+                            dicStack.push(f.toString());
+                        }
+                    }
+                }
+            }
         }
     }
 
-    private void digui(File file, Integer countDeep, List<FileEntity> list) {
-        if (!file.exists()) {
-            return;
-        } else if (file.isDirectory()) {
-            File[] files = file.listFiles();
-            countDeep++;
-            if (countDeep >= maxDeep) {
-                for (File f : files) {
-                    digui(f, countDeep, list);
-                }
-            } else {
-                unScan.addAll(Arrays.asList(files));
-            }
-        } else {
-            FileEntity e = ((FileEntity) new FileEntity()
-                    .setFileName(file.getName())
-                    .setFilePath(file.getAbsolutePath())
-                    .setFileSize(file.length())
-                    .setIsDir(false)
-                    .setIsWrite(file.canWrite()).setIsHidden(file.isHidden())
-                    .setCreateTime(new Date(file.lastModified())));
-            list.add(e);
-        }
+    public FileEntity fileToFileEntity(File file) {
+        FileEntity e = ((FileEntity) new FileEntity()
+                .setFileName(file.getName())
+                .setFilePath(file.getAbsolutePath())
+                .setFileSize(file.length())
+                .setIsDir(false)
+                .setIsWrite(file.canWrite()).setIsHidden(file.isHidden())
+                .setCreateTime(new Date(file.lastModified())));
+        return e;
     }
 }
